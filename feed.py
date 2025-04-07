@@ -23,12 +23,6 @@ def fetch_alerts():
     else:
         return None
 
-def play_nnnn_tone():
-    pygame.mixer.music.load(NNNN)
-    pygame.mixer.music.play()
-    while pygame.mixer.music.get_busy():
-        time.sleep(1)
-
 def play_attention_tone():
     pygame.mixer.music.load(Tone)
     pygame.mixer.music.play()
