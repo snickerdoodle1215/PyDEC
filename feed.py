@@ -67,7 +67,7 @@ def main():
                     print(f"Emergency alert: {title}")
                     print(f"Details: {summary}" + "\n")
                     print(f"CAP: {link}" +"\n")
-                    print(f"Received: " + timestamp + " Pacific Time")
+                    print(f"Received: " + timestamp)
                     print("_" * 50)
 
                     log_processed_alert(alert_id)
