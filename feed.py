@@ -6,19 +6,18 @@ import os
 import pyttsx3
 from datetime import datetime
 
-NWS_URL = "https://api.weather.gov/alerts/active.atom?certainty=Likely%2CPossible&severity=Extreme%2CSevere&urgency=Immediate"
+NWS = "https://api.weather.gov/alerts/active.atom?certainty=Likely%2CPossible&severity=Extreme%2CSevere&urgency=Immediate"
 
-ATTENTION_TONE_PATH = "chimes+attention.wav"
-NNNN = "nnnn.wav"
+Tone = "chimes.wav"
 
-LOG_FILE_PATH = "processed_alerts.txt"
+Log = "log.txt"
 
 pygame.mixer.init()
 
 engine = pyttsx3.init()
 
 def fetch_alerts():
-    response = requests.get(NWS_URL)
+    response = requests.get(NWS)
     if response.status_code == 200:
         return response.text
     else:
@@ -31,20 +30,20 @@ def play_nnnn_tone():
         time.sleep(1)
 
 def play_attention_tone():
-    pygame.mixer.music.load(ATTENTION_TONE_PATH)
+    pygame.mixer.music.load(Tone)
     pygame.mixer.music.play()
     while pygame.mixer.music.get_busy():
         time.sleep(1)
 
 def load_processed_alerts():
-    if os.path.exists(LOG_FILE_PATH):
-        with open(LOG_FILE_PATH, "r") as f:
+    if os.path.exists(Log):
+        with open(Log, "r") as f:
             return set(f.read().splitlines())
     return set()
 
 def log_processed_alert(alert_id):
     # Append the alert ID to the log file
-    with open(LOG_FILE_PATH, "a") as f:
+    with open(Log, "a") as f:
         f.write(alert_id + "\n")
 
 def main():
@@ -69,7 +68,7 @@ def main():
                     print(f"Details: {summary}" + "\n")
                     print(f"CAP: {link}" +"\n")
                     print(f"Received: " + timestamp + " Pacific Time")
-                    print("-" * 40)
+                    print("_" * 50)
 
                     log_processed_alert(alert_id)
                     processed_alerts.add(alert_id)
@@ -81,10 +80,9 @@ def main():
                     alert_text = f"Here is an urgent message from the National Weather Service: {summary}"
                     engine.say(alert_text)
                 engine.runAndWait()
-                play_nnnn_tone() 
 
         else:
-            print("Failed to fetch alerts.")
+            print("Failed to receive alerts.")
 
         time.sleep(10) 
 
