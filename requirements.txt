@@ -1,0 +1,1 @@
+pygame requests pyttsx3
